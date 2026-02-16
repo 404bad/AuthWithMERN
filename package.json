@@ -3,11 +3,11 @@
   "module": "backend/index.ts",
   "type": "module",
   "scripts": {
-    "backend": "nodemon --exec bun backend/index.js",
+    "backend": "bun --watch backend/index.ts",
     "frontend": "cd frontend && vite",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "build": "cd frontend && vite build",
-    "start": "NODE_ENV=production bun backend/index.js",
+    "start": "NODE_ENV=production bun backend/index.ts",
     "prod": "npm run build && npm run start"
   },
   "private": true,
@@ -17,8 +17,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.2.3",
-    "nodemon": "^3.1.11"
+    "@types/node": "^25.2.3"
   },
   "peerDependencies": {
     "typescript": "^5"
