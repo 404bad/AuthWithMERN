@@ -7,6 +7,7 @@ import { generateVerificationCode } from "../utils/verificationCode";
 import { generateTokenAndSetCookie } from "../utils/jwt";
 import {
   sendPasswordResetEmail,
+  sendPasswordResetSucessEmail,
   sendVerificationToken,
   sendWelcomeEmail,
 } from "../mailtrap/emails";
@@ -204,4 +205,45 @@ export const forgotPassword = async (req: Request, res: Response) => {
       message: "Failed to reset the password",
     });
   }
+};
+
+// Reset Password
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpiresAt: {
+        $gt: Date.now(),
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired Reset Token",
+      });
+    }
+
+    //update Password
+    const hashedPassword = await hashPassword(password);
+    user.password = hashPassword.toString();
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiresAt = undefined;
+
+    await user.save();
+
+    await sendPasswordResetSucessEmail(user.email);
+
+    return res.status(200).json({
+      success: true,
+      message: "Password Reset Successfully",
+    });
+  } catch (error) {}
+  return res.status(500).json({
+    success: false,
+    message: "Failed to reset password",
+  });
 };

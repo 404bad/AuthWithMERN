@@ -159,3 +159,62 @@ export const WELCOME_EMAIL_TEMPLATE = `
 </body>
 </html>
 `;
+
+export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="margin:0;padding:0;background-color:#f4f6fb;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#10b981,#22c55e);padding:30px;text-align:center;color:white;">
+              <h2 style="margin:0;font-size:22px;">Password Reset Successful ✅</h2>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding:30px;color:#333;">
+              <p>Hello 👋</p>
+              
+              <p>
+                Your password has been successfully updated. You can now log in using your new password.
+              </p>
+
+              <div style="text-align:center;margin:30px 0;">
+                <a href="{loginURL}"
+                  style="background:#4F46E5;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;display:inline-block;">
+                  Login to Your Account
+                </a>
+              </div>
+
+              <p style="font-size:14px;color:#666;">
+                If you did not perform this action, please contact our support team immediately to secure your account.
+              </p>
+
+              <p>Stay secure,<br><strong>The Team</strong></p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="text-align:center;padding:20px;font-size:12px;color:#777;background:#f9fafc;">
+              © ${new Date().getFullYear()} Kailash Badu. All rights reserved.
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
