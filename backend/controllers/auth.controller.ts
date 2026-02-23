@@ -237,11 +237,19 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     await sendPasswordResetSucessEmail(user.email);
 
+    // Clear the existing session cookie so the user must log in again with their new password
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: config.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
     return res.status(200).json({
       success: true,
       message: "Password Reset Successfully",
     });
   } catch (error) {
+    console.log("Error in resetPassword", error);
     return res.status(500).json({
       success: false,
       message: "Failed to reset password",
