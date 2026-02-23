@@ -1,5 +1,8 @@
 import { mailtrapClient, sender } from "../config/mailtrap.config";
-import { VERIFICATION_EMAIL_TEMPLATE } from "./email.template";
+import {
+  VERIFICATION_EMAIL_TEMPLATE,
+  WELCOME_EMAIL_TEMPLATE,
+} from "./email.template";
 
 export const sendVerificationToken = async (
   email: string,
@@ -23,6 +26,25 @@ export const sendVerificationToken = async (
     console.error("Error sending verification email:", error);
     throw new Error(
       `Failed to send verification email: ${(error as Error).message}`,
+    );
+  }
+};
+
+export const sendWelcomeEmail = async (email: string, name: string) => {
+  const recepient = [{ email }];
+  try {
+    const response = await mailtrapClient.send({
+      from: sender,
+      to: recepient,
+      subject: "Welcome to Kailash Badu",
+      html: WELCOME_EMAIL_TEMPLATE.replace("{userName}", name),
+      category: "welcome Email",
+      text: `Welcome ${name}.`,
+    });
+  } catch (error) {
+    console.error("Error sending welcome email:", error);
+    throw new Error(
+      `Failed to send welcome email: ${(error as Error).message}`,
     );
   }
 };
