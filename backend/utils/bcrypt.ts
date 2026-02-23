@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
+import config from "../config/env.config";
 
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = config.SALT_ROUNDS;
 
 /**
  * Hashes a plain text password.

@@ -177,7 +177,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        success: true,
+        success: false,
         message: "User not found",
       });
       //Generate reset Token
@@ -229,7 +229,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     //update Password
     const hashedPassword = await hashPassword(password);
-    user.password = hashPassword.toString();
+    user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiresAt = undefined;
 
@@ -241,9 +241,32 @@ export const resetPassword = async (req: Request, res: Response) => {
       success: true,
       message: "Password Reset Successfully",
     });
-  } catch (error) {}
-  return res.status(500).json({
-    success: false,
-    message: "Failed to reset password",
-  });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to reset password",
+    });
+  }
+};
+
+export const checkAuth = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById((req as any).userId);
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not Found.",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log("Error in Check Auth", error);
+    return res.status(500).json({
+      success: false,
+      message: `Internal Server Error. ${error}`,
+    });
+  }
 };

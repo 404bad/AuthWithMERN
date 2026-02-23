@@ -29,3 +29,11 @@ export const generateTokenAndSetCookie = (
 
   return token;
 };
+
+export const verifyJwtToken = (token: string): string | Jwt.JwtPayload => {
+  try {
+    return Jwt.verify(token, config.JWT_SECRET);
+  } catch (error) {
+    throw new Error("Invalid or expired token");
+  }
+};
