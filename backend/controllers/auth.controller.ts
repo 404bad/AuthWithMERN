@@ -1,9 +1,11 @@
 import { type Request, type Response } from "express";
 import User from "../models/user.model";
-import { hashPassword } from "../utils/bcrypt";
+import { comparePassword, hashPassword } from "../utils/bcrypt";
 import { generateVerificationCode } from "../utils/verificationCode";
 import { generateTokenAndSetCookie } from "../utils/jwt";
 import { sendVerificationToken, sendWelcomeEmail } from "../mailtrap/emails";
+import { Utf8Stream } from "fs";
+import { udpSocket } from "bun";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password } = req.body;
@@ -52,10 +54,50 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const signin = (req: Request, res: Response): void => {
-  res.json({ message: "Signin endpoint is working!" });
-};
+//Login controller
+export const signin = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
 
+  try {
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.status(400).json({
+        status: false,
+        message: "Invalid Credentials",
+      });
+    }
+
+    const isPasswordValid = await comparePassword(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        status: false,
+        message: "Invalid Credentials",
+      });
+    }
+
+    generateTokenAndSetCookie(res, user._id.toString());
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    //  Destructure before returning
+    const { password: _pwd, ...userSafe } = user.toObject();
+
+    return res.status(200).json({
+      status: true,
+      message: "Logged in Successfully",
+      user: { ...userSafe },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: (error as Error).message,
+    });
+  }
+};
+// Verify Token controller
 export const verifyEmail = async (req: Request, res: Response) => {
   const { code } = req.body;
   try {
@@ -96,6 +138,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
   }
 };
 
+// LOgout Controller
 export const logout = (req: Request, res: Response): void => {
   res.json({ message: "Logout endpoint is working!" });
 };
