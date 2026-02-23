@@ -144,8 +144,29 @@ export const verifyEmail = async (req: Request, res: Response) => {
 };
 
 // LOgout Controller
-export const logout = (req: Request, res: Response): void => {
-  res.json({ message: "Logout endpoint is working!" });
+export const logout = (req: Request, res: Response) => {
+  try {
+    if (!req.cookies.token) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not logged in" });
+    }
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+
+    return res
+      .status(200)
+      .json({ success: true, message: "User logged out successfully" });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong during logout",
+    });
+  }
 };
 
 // Forgot password
