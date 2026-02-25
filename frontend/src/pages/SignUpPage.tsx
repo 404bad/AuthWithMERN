@@ -19,7 +19,7 @@ const SignUpPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-md w-full bg-gray-800 bg-opacity-50
+      className="max-w-md w-full bg-slate-800 bg-opacity-50
        backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden"
     >
       <div className="p-8">
@@ -71,8 +71,8 @@ const SignUpPage = () => {
       </div>
       <div className="px-8 py-4 bg-slate-900 bg-opacity-50 justify-center">
         <p className="text-sm text-slate-400 text-center">
-          Already havean account?
-          <Link to={"login"} className="text-rose-400 hover:underline ml-2">
+          Already have an account?
+          <Link to="/login" className="text-rose-400 hover:underline ml-2">
             Signin
           </Link>
         </p>
