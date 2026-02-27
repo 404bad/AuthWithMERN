@@ -13,7 +13,7 @@ import {
 } from "../mailtrap/emails";
 import config from "../config/env.config";
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const signup = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   try {
     if (!name || !email || !password) {
@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
     const userAlreadyExists = await User.findOne({ email });
     if (userAlreadyExists) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "User with this email already exists",
       });
