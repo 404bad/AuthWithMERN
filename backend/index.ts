@@ -6,6 +6,7 @@ import express, { type Request, type Response } from "express";
 import config from "./config/env.config";
 import connectDb from "./config/db.config";
 import authRoutes from "./routes/auth.route";
+import cors from "cors";
 
 import cookieParser from "cookie-parser";
 
@@ -14,6 +15,15 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://your-production-domain.com"
+        : "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 // API Routes
 app.get("/", (req: Request, res: Response) => {
