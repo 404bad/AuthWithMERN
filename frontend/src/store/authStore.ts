@@ -12,6 +12,9 @@ interface User {
   _id?: string;
   email: string;
   name: string;
+  isVerified: boolean;
+  createdAt: string;
+  lastLogin: string;
 }
 
 interface AuthState {
@@ -67,7 +70,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await axios.post(`${API_URL}/signin`, {
         email,
         password,
       });
@@ -92,7 +95,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      await axios.post(`${API_URL}/logout`);
+      await axios.post(`${API_URL}/signout`);
 
       set({
         user: null,
