@@ -6,9 +6,9 @@
     "backend": "bun --watch backend/index.ts",
     "frontend": "cd frontend && vite",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "build": "cd frontend && vite build",
+    "build": "bun install && cd frontend && bun install && bunx vite build",
     "start": "NODE_ENV=production bun backend/index.ts",
-    "prod": "npm run build && npm run start"
+    "prod": "bun run build && bun run start"
   },
   "private": true,
   "devDependencies": {
